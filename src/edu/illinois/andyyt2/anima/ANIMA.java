@@ -33,6 +33,7 @@ public class ANIMA extends javax.swing.JFrame {
     private double stdivide = 1.0;
     private double stdivide2 = 4.0;
     private String username;
+    private final String FILE_SEPERATOR = File.separator;
     //private String header = "C:/Users/" + username + "/Desktop/KMC Lab/CA3_KMC_TIFF/052419_KMC_F-1_4 month_IV-Lt-3_Ca3/";
 
     /**
@@ -52,19 +53,23 @@ public class ANIMA extends javax.swing.JFrame {
         BufferedReader f;
         try {
             System.out.println(username);
-            boolean directory = new File(username + "/AnalysisEngine").mkdirs();
+            boolean directory = new File(username + FILE_SEPERATOR + "AnalysisEngine").mkdirs();
             if(!directory) {
-                boolean count = new File(username + "/AnalysisEngine/count").mkdirs();
-                boolean maps = new File(username + "/AnalysisEngine/maps").mkdirs();
+                boolean count = new File(username + FILE_SEPERATOR + "AnalysisEngine"
+                        + FILE_SEPERATOR + "count").mkdirs();
+                boolean maps = new File(username + FILE_SEPERATOR + "AnalysisEngine"
+                        + FILE_SEPERATOR + "maps").mkdirs();
 
                 System.out.println("Directory created? ");
                 System.out.println("count: " + count);
                 System.out.println("maps: " + maps);
             }
 
-            boolean exists = new File(username + "/AnalysisEngine/count/count.txt").isFile();
+            boolean exists = new File(username + FILE_SEPERATOR + "AnalysisEngine"
+                    + FILE_SEPERATOR + "count" + FILE_SEPERATOR + "count.txt").isFile();
             if(!exists) {
-                PrintWriter out = new PrintWriter(new FileWriter(username + "/AnalysisEngine/count/count.txt"));
+                PrintWriter out = new PrintWriter(new FileWriter(username + FILE_SEPERATOR +
+                        "AnalysisEngine" + FILE_SEPERATOR + "count" + FILE_SEPERATOR + "count.txt"));
                 out.println(0);
                 out.close();
             }
@@ -79,7 +84,8 @@ public class ANIMA extends javax.swing.JFrame {
         }
         
         jTextArea1.setText("Image Analyzer - Run #" + count);
-        jLabel2.setText("Output to C:/Users/" + username + "/Documents/AnalysisEngine");
+        jLabel2.setText("Output to" + username + FILE_SEPERATOR + "Documents"
+                + FILE_SEPERATOR + "AnalysisEngine");
     }
     
     private int getBlue(int a) {
