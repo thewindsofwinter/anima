@@ -44,14 +44,32 @@ public class ANIMA extends javax.swing.JFrame {
         analysisImage = null;
         thresh = -1;
         gThresh = -1;
-        username = System.getProperty("user.name");
+        username = System.getProperty("user.home");
         
         visited = new int[0][0];
         currentGrp = 1;
         
         BufferedReader f;
         try {
-            f = new BufferedReader(new FileReader("C:/Users/" + username + "/Documents/AnalysisEngine/count/count.txt"));
+            System.out.println(username);
+            boolean directory = new File(username + "/AnalysisEngine").mkdirs();
+            if(!directory) {
+                boolean count = new File(username + "/AnalysisEngine/count").mkdirs();
+                boolean maps = new File(username + "/AnalysisEngine/maps").mkdirs();
+
+                System.out.println("Directory created? ");
+                System.out.println("count: " + count);
+                System.out.println("maps: " + maps);
+            }
+
+            boolean exists = new File(username + "/AnalysisEngine/count/count.txt").isFile();
+            if(!exists) {
+                PrintWriter out = new PrintWriter(new FileWriter(username + "/AnalysisEngine/count/count.txt"));
+                out.println(0);
+                out.close();
+            }
+
+            f = new BufferedReader(new FileReader(username + "/AnalysisEngine/count/count.txt"));
             count = Integer.parseInt(f.readLine());
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ANIMA.class.getName()).log(Level.SEVERE, null, ex);
