@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.illinois.andyyt2.anima;
 
+// Import necessary packages
 import java.awt.Color;
 import javax.imageio.ImageIO;
 import java.awt.image.*;
@@ -14,42 +10,59 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 
-
-
 /**
+ * ANIMA (Analysis of Neural Images through Machine Algorithms)
+ * is a Java-based image processing software specialized for
+ * immunohistochemically stained neuron images.
  *
- * @author " + username + "
+ * @author Andy Tang
  */
 public class ANIMA extends javax.swing.JFrame {
 
+    // Variables describing the guide stain image and image to be analyzed
     private BufferedImage guideImage;
     private BufferedImage analysisImage;
+
+    // Variables which will store thresholds to measure the "edges" of each cell in the image
     private int thresh;
     private int gThresh;
+
+    // Two-dimensional array for the breadth-first search
     private int[][] visited;
+    // Variables keeping track of which cell is currently being analyzed
     private int currentGrp;
     private int count;
+
+    // A file chooser in the GUI (Graphical User Interface)
     private final JFileChooser fc = new JFileChooser();
-    private double stdivide = 1.0;
-    private double stdivide2 = 4.0;
+
+    // Constants to help determine edge of cell in guide and analysis essay
+    private final double GUIDE_DEVIATION = 1.0;
+    private final double ANALYSIS_DEVIATION = 4.0;
+
+    // Properties of the computer that is measured on initialization
     private String username;
     private final String FILE_SEPERATOR = File.separator;
-    //private String header = "C:/Users/" + username + "/Desktop/KMC Lab/CA3_KMC_TIFF/052419_KMC_F-1_4 month_IV-Lt-3_Ca3/";
 
     /**
      * Creates new form ANIMA
      */
     public ANIMA() {
+        // Initialize variables to null
         initComponents();
         guideImage = null;
         analysisImage = null;
         thresh = -1;
         gThresh = -1;
+
+        // Measure the user home folder
         username = System.getProperty("user.home");
-        
+
+        // Initialize Breadth-First Search algorithm
         visited = new int[0][0];
         currentGrp = 1;
-        
+
+        // Read in old data
         BufferedReader f;
         try {
             System.out.println(username);
@@ -462,8 +475,8 @@ public class ANIMA extends javax.swing.JFrame {
                     stdev = Math.sqrt(stdev);
                     
                     //TODO: CHANGE [DONE]
-                    System.out.println("Guide threshold:" + (mean + stdev/stdivide));
-                    gThresh = (int) (mean + stdev/stdivide);
+                    System.out.println("Guide threshold:" + (mean + stdev/ GUIDE_DEVIATION));
+                    gThresh = (int) (mean + stdev/ GUIDE_DEVIATION);
                     
                     
                     jTextArea1.setText(jTextArea1.getText() + "\n" +"Status: Ready");
@@ -529,8 +542,8 @@ public class ANIMA extends javax.swing.JFrame {
                     System.out.println(mean + " " + stdev);
                     
                     //TODO: CHANGE [DONE]
-                    System.out.println("Analysis threshold:" + (mean + stdev/stdivide2));
-                    thresh = (int) (mean + stdev/stdivide2);
+                    System.out.println("Analysis threshold:" + (mean + stdev/ANALYSIS_DEVIATION));
+                    thresh = (int) (mean + stdev/ANALYSIS_DEVIATION);
                     if(thresh < 5) {
                         thresh = 5;
                     }
