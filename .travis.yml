@@ -1,4 +1,4 @@
 language: java
-install: ant deps
 jdk:
   - openjdk11
+script: ant main
