@@ -1,6 +1,4 @@
-# Analyzer of Neural Images through Machine Algorithms
-[![Build Status](https://travis-ci.com/thewindsofwinter/anima.svg?branch=master)](https://travis-ci.com/thewindsofwinter/anima) 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# Project ANIMA [![Build Status](https://travis-ci.com/thewindsofwinter/anima.svg?branch=master)](https://travis-ci.com/thewindsofwinter/anima) [![license: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
 
