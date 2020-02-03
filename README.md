@@ -1,5 +1,8 @@
 # Analyzer of Neural Images through Machine Algorithms
-[![Build Status](https://travis-ci.com/thewindsofwinter/anima.svg?branch=master)](https://travis-ci.com/thewindsofwinter/anima)
+[![Build Status](https://travis-ci.com/thewindsofwinter/anima.svg?branch=master)](https://travis-ci.com/thewindsofwinter/anima) 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+
 
 ANIMA (Analyzer for Neural Images through Machine Algorithms) is a Java-based image processing software specialized for 
 immunohistochemically stained neuron images. This repository replaces thewindsofwinter/neural-analysis as a more permanent 
