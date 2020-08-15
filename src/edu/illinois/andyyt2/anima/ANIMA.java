@@ -32,6 +32,8 @@ public class ANIMA extends javax.swing.JFrame {
     // Variables keeping track of which cell is currently being analyzed
     private int currentGrp;
     private int count;
+    private ArrayDeque<Integer> values;
+    private String path;
 
     // A file chooser in the GUI (Graphical User Interface)
     private final JFileChooser fc = new JFileChooser();
@@ -54,6 +56,8 @@ public class ANIMA extends javax.swing.JFrame {
         analysisImage = null;
         thresh = -1;
         gThresh = -1;
+        values = new ArrayDeque<>();
+        path = "";
 
         // Measure the user home folder
         username = System.getProperty("user.home");
@@ -66,29 +70,33 @@ public class ANIMA extends javax.swing.JFrame {
         BufferedReader f;
         try {
             System.out.println(username);
-            boolean directory = new File(username + FILE_SEPERATOR + "AnalysisEngine").mkdirs();
+            boolean directory = new File(username + FILE_SEPERATOR + "Documents/AnalysisEngine").mkdirs();
             if(!directory) {
-                boolean count = new File(username + FILE_SEPERATOR + "AnalysisEngine"
+                boolean count = new File(username + FILE_SEPERATOR + "Documents/AnalysisEngine"
                         + FILE_SEPERATOR + "count").mkdirs();
-                boolean maps = new File(username + FILE_SEPERATOR + "AnalysisEngine"
+                boolean maps = new File(username + FILE_SEPERATOR + "Documents/AnalysisEngine"
                         + FILE_SEPERATOR + "maps").mkdirs();
+                boolean data = new File(username + FILE_SEPERATOR + "Documents/AnalysisEngine"
+                        + FILE_SEPERATOR + "data").mkdirs();
 
                 System.out.println("Directory created? ");
                 System.out.println("count: " + count);
                 System.out.println("maps: " + maps);
+                System.out.println("data: " + data);
             }
 
             boolean exists = new File(username + FILE_SEPERATOR + "AnalysisEngine"
                     + FILE_SEPERATOR + "count" + FILE_SEPERATOR + "count.txt").isFile();
             if(!exists) {
                 PrintWriter out = new PrintWriter(new FileWriter(username + FILE_SEPERATOR +
-                        "AnalysisEngine" + FILE_SEPERATOR + "count" + FILE_SEPERATOR + "count.txt"));
+                        "Documents/AnalysisEngine" + FILE_SEPERATOR + "count" + FILE_SEPERATOR + "count.txt"));
                 out.println(0);
                 out.close();
             }
 
-            f = new BufferedReader(new FileReader(username + "/AnalysisEngine/count/count.txt"));
+            f = new BufferedReader(new FileReader(username + "/Documents/AnalysisEngine/count/count.txt"));
             count = Integer.parseInt(f.readLine());
+            System.out.println(count);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ANIMA.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -121,6 +129,8 @@ public class ANIMA extends javax.swing.JFrame {
                         && getBlue(analysisImage.getRGB(i, j)) > thresh 
                         && visited[i][j] == 0) {
                     visited[i][j] = currentGrp;
+                    // Keep track of how many cells are over the threshold
+                    int ct = 1;
                     q.add(i*guideImage.getHeight() + j);
                     
                     while(!q.isEmpty()) {
@@ -141,13 +151,20 @@ public class ANIMA extends javax.swing.JFrame {
                                     && getBlue(analysisImage.getRGB(tempI + prm[0], tempJ + prm[1])) > thresh) {
                                 visited[tempI + prm[0]][tempJ + prm[1]] = currentGrp;
                                 q.add((tempI + prm[0]) * guideImage.getHeight() + (tempJ + prm[1]));
+                                if(getBlue(guideImage.getRGB(tempI + prm[0], tempJ + prm[1])) > gThresh) {
+                                    ct++;
+                                }
                             }
                         }
                     }
+                    
+                    values.add(ct);
                     currentGrp ++;
                 }
             }
         }
+        
+        System.out.println(values);
     }
 
     /**
@@ -318,7 +335,7 @@ public class ANIMA extends javax.swing.JFrame {
                 scanGuide();
                 jTextArea1.setText(jTextArea1.getText() + "\n\n" +"Summing groups...");
                 //jLabel4.setForeground(Color.ORANGE);
-                double[][] groups = new double[currentGrp - 1][3];
+                double[][] groups = new double[currentGrp - 1][4];
                 ArrayList<Integer> listLarge = new ArrayList<>();
                 BufferedImage a = new BufferedImage(guideImage.getWidth(), guideImage.getHeight(), BufferedImage.TYPE_INT_RGB);
                 
@@ -337,19 +354,32 @@ public class ANIMA extends javax.swing.JFrame {
                 }
                 
                 for(int i = 0; i < groups.length; i++) {
-                    if(groups[i][0] > 500.0) {
+                    groups[i][3] = values.poll();
+                    if(groups[i][0] > 500.0 && groups[i][3] > 100) {
                         listLarge.add(i);
                     }
                 }
                 
                 for(int i = 0; i < guideImage.getWidth(); i++) {
                     for(int j = 0; j < guideImage.getHeight(); j++) {
+                        // Mark neuron detected
+                        if(getBlue(guideImage.getRGB(i, j)) > gThresh) {
+                            Color c = new Color(125, 0, 255, 255);
+                            a.setRGB(i, j, c.getRGB());
+                        }
                         if(visited[i][j] != 0 && listLarge.contains(visited[i][j] - 1)) {
                             int decide = listLarge.indexOf(visited[i][j] - 1) + 1;
                             int redv = decide & 3;
                             int greenv = (decide & 12)/4;
                             Color c = new Color(redv*80, greenv*80, 0, 255);
-                            a.setRGB(i, j, c.getRGB());
+                            Color neuron = new Color(125, 0, 255, 255);
+                            if(a.getRGB(i, j) != neuron.getRGB()) {
+                                a.setRGB(i, j, c.getRGB());
+                            }
+                            else {
+                                c = new Color(redv*80, greenv*80, 255, 255);
+                                a.setRGB(i, j, c.getRGB());
+                            }
                         }
                     }
                 }
@@ -360,11 +390,11 @@ public class ANIMA extends javax.swing.JFrame {
                         + "\n------------------------------------------------------");
                 //jLabel4.setForeground(Color.ORANGE);
                 try {
-                    PrintWriter data = new PrintWriter(new FileWriter("C:/Users/" + username + "/Documents/AnalysisEngine/data/data" + count + ".txt"));
-                    PrintWriter cumulative = new PrintWriter(new FileWriter("C:/Users/" + username + "/Documents/AnalysisEngine/cumulative.csv", true));
+                    PrintWriter data = new PrintWriter(new FileWriter(username + "/Documents/AnalysisEngine/data/data" + count + ".txt"));
+                    PrintWriter cumulative = new PrintWriter(new FileWriter(username + "/Documents/AnalysisEngine/cumulative.csv", true));
                     
                     data.println("Pixels      MeanInt     RawInt");
-                    cumulative.println("Run #" + count + ",,");
+                    cumulative.println("Run #" + count + ", File: " + path + ",");
                     cumulative.println("Size,MeanIntensity,RawIntensity");
                     System.out.println("Pixels      MeanInt     RawInt");
                     for(int i = 0; i < groups.length; i++) {
@@ -373,8 +403,9 @@ public class ANIMA extends javax.swing.JFrame {
                         if(listLarge.contains(i)) {
                             //Mean
                             grp[2] = grp[1]/grp[0];
+                            // Add the count of each group
                             cumulative.println((Math.floor(grp[0]*1000.0/625.0)/1000) + "," + (Math.floor(grp[2]*1000)/1000) + "," + Math.floor(grp[1]));
-                            StringBuilder s = new StringBuilder("" + Math.floor(grp[0]));
+                            StringBuilder s = new StringBuilder("" + Math.floor(grp[0]) + "/" + grp[3]);
                             StringBuilder s2 = new StringBuilder("" + Math.floor(grp[2]*1000)/1000);
                             StringBuilder s3 = new StringBuilder("" + Math.floor(grp[1]));
                         
@@ -410,16 +441,18 @@ public class ANIMA extends javax.swing.JFrame {
                     data.close();
                     cumulative.close();
                     
-                    File outputfile = new File("C:/Users/" + username + "/Documents/AnalysisEngine/maps/result" + count + ".jpg");
-                    ImageIO.write(a, "jpg", outputfile);
+                    // Change to lossless format
+                    File outputfile = new File(username + "/Documents/AnalysisEngine/maps/result" + count + ".png");
+                    ImageIO.write(a, "png", outputfile);
                     count++;
                     System.out.println(count);
-                    PrintWriter out = new PrintWriter(new FileWriter("C:/Users/" + username + "/Documents/AnalysisEngine/count/count.txt"));
+                    PrintWriter out = new PrintWriter(new FileWriter(username + "/Documents/AnalysisEngine/count/count.txt"));
                     out.println(count);
                     out.close();
                     
                 } catch (IOException e) {
                     //Stuff should happen lol
+                    e.printStackTrace();
                 }
                 
                 jTextArea1.setText(jTextArea1.getText() + "\n" +"Complete!");
@@ -440,6 +473,7 @@ public class ANIMA extends javax.swing.JFrame {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
             if(file.exists()) {
+                path = file.getAbsolutePath();
                 try {
                     jTextArea1.setText(jTextArea1.getText() + "\n\n" +"Processing Image...");
                     //jLabel4.setForeground(Color.ORANGE);
@@ -544,11 +578,16 @@ public class ANIMA extends javax.swing.JFrame {
                     //TODO: CHANGE [DONE]
                     System.out.println("Analysis threshold:" + (mean + stdev/ANALYSIS_DEVIATION));
                     thresh = (int) (mean + stdev/ANALYSIS_DEVIATION);
+                    /* if(thresh < 9) {
+                        // System.out.println(mean + stdev);
+                        thresh = (int)Math.round(mean + stdev);
+                    } */
+                    
                     if(thresh < 5) {
                         thresh = 5;
                     }
-                    //thresh = 15;
-                
+                    // thresh = 15;
+                    thresh = 20;
                     //thresh = 35;
                 
                     jTextArea1.setText(jTextArea1.getText() + "\n" +"Status: Ready");
@@ -579,6 +618,8 @@ public class ANIMA extends javax.swing.JFrame {
         
         visited = new int[0][0];
         currentGrp = 1;
+        values = new ArrayDeque<>();
+        path = "";
         
         jLabel5.setText("Guide Uploaded: No");
         jLabel5.setForeground(Color.BLACK);

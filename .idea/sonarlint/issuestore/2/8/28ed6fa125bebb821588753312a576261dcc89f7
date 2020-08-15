@@ -1,0 +1,88 @@
+
+dsquid:S1192³"GDefine a constant instead of duplicating this literal "Tahoma" 7 times.(‚Ó¤¦ÿÿÿÿÿ
+bsquid:S1192ë"JDefine a constant instead of duplicating this literal "C:/Users/" 4 times.(‚áó¯
+]squid:S1192H"FDefine a constant instead of duplicating this literal "count" 3 times.(Îã…ü
+ksquid:S1192E"ODefine a constant instead of duplicating this literal "AnalysisEngine" 6 times.(Äø‚äşÿÿÿÿ
+fsquid:S2095ì"IUse try-with-resources or close this "PrintWriter" in a "finally" clause.(€Üšûÿÿÿÿ
+asquid:S2095ë"IUse try-with-resources or close this "PrintWriter" in a "finally" clause.(‚áó¯
+hsquid:S2095Z"LUse try-with-resources or close this "BufferedReader" in a "finally" clause.(Š‰Ô¥øÿÿÿÿ
+@squid:S1604Ê"(Make this anonymous inner class a lambda(ÿóÎ×
+?squid:S1604Ñ"(Make this anonymous inner class a lambda(¥Šîj
+Esquid:S1604å"(Make this anonymous inner class a lambda(üåêøÿÿÿÿ
+osquid:S1450ì"WRemove the "jButton1" field and declare it as a local variable in the relevant methods.(å……¶
+osquid:S1450í"WRemove the "jButton2" field and declare it as a local variable in the relevant methods.(¤½ÃÜ
+tsquid:S1450î"WRemove the "jButton3" field and declare it as a local variable in the relevant methods.(ĞäğËıÿÿÿÿ
+tsquid:S1450ï"WRemove the "jButton4" field and declare it as a local variable in the relevant methods.(€„ˆÎÿÿÿÿÿ
+ssquid:S1450ğ"VRemove the "jLabel1" field and declare it as a local variable in the relevant methods.(°ãÉ¸ÿÿÿÿÿ
+nsquid:S1450ò"VRemove the "jLabel4" field and declare it as a local variable in the relevant methods.(«¢•ã
+nsquid:S1450õ"VRemove the "jLabel7" field and declare it as a local variable in the relevant methods.(×ê˜Ÿ
+xsquid:S1450ö"[Remove the "jScrollPane1" field and declare it as a local variable in the relevant methods.(¤á×ÿÿÿÿÿ
+rsquid:S1450÷"ZRemove the "jSeparator1" field and declare it as a local variable in the relevant methods.(’©ìÉ
+rsquid:S1450ø"ZRemove the "jSeparator2" field and declare it as a local variable in the relevant methods.(èÅĞø
+=squid:S1170("!Make this final field static too.(Ú¯‚ûÿÿÿÿ
+=squid:S1170)"!Make this final field static too.(˜¸ê…úÿÿÿÿ
+=squid:S1170-"!Make this final field static too.(ƒĞûÿÿÿÿÿ
+wsquid:S00116("ZRename this field "GUIDE_DEVIATION" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ú¯‚ûÿÿÿÿ
+zsquid:S00116)"]Rename this field "ANALYSIS_DEVIATION" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(˜¸ê…úÿÿÿÿ
+vsquid:S00116-"YRename this field "FILE_SEPERATOR" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ƒĞûÿÿÿÿÿ
+Hsquid:S1948",Make "guideImage" transient or serializable.(ş“¸¶ùÿÿÿÿ
+Ksquid:S1948"/Make "analysisImage" transient or serializable.(Æù½Ûùÿÿÿÿ
+T
+squid:S106D"9Replace this use of System.out or System.err by a logger.(­ ‘ˆüÿÿÿÿ
+`squid:HiddenFieldCheckG"9Rename "count" which hides the field declared at line 34.(çö»Éÿÿÿÿÿ
+T
+squid:S106L"9Replace this use of System.out or System.err by a logger.(æ°Òˆøÿÿÿÿ
+O
+squid:S106M"9Replace this use of System.out or System.err by a logger.(šÈŞ§
+T
+squid:S106N"9Replace this use of System.out or System.err by a logger.(ÙÂé•úÿÿÿÿ
+nsquid:S3776m"RRefactor this method to reduce its Cognitive Complexity from 23 to the 15 allowed.(ÌÂ ¡şÿÿÿÿ
+Rsquid:S1161º":Add the "@Override" annotation above this method signature(†ŒË³
+osquid:S3776µ"RRefactor this method to reduce its Cognitive Complexity from 70 to the 15 allowed.(óÄÔØøÿÿÿÿ
+Gsquid:S1172µ"*Remove this unused method parameter "evt".(óÄÔØøÿÿÿÿ
+Osquid:S1135¶"2Complete the task associated to this TODO comment.(ÜÀ†áûÿÿÿÿ
+P
+squid:S106ñ"9Replace this use of System.out or System.err by a logger.(Ûµâ–
+U
+squid:S106•"9Replace this use of System.out or System.err by a logger.(¦úïêÿÿÿÿÿ
+U
+squid:S106 "9Replace this use of System.out or System.err by a logger.(³ğ¸ûÿÿÿÿ
+osquid:S3776³"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(¹¾ûüÿÿÿÿ
+Gsquid:S1172³"*Remove this unused method parameter "evt".(¹¾ûüÿÿÿÿ
+Osquid:S1135´"2Complete the task associated to this TODO comment.(ÜÀ†áûÿÿÿÿ
+P
+squid:S106Ş"9Replace this use of System.out or System.err by a logger.(¦Î
+Jsquid:S1135İ"2Complete the task associated to this TODO comment.(›£Û´
+isquid:S3776ó"RRefactor this method to reduce its Cognitive Complexity from 29 to the 15 allowed.(Š–ÿG
+Asquid:S1172ó"*Remove this unused method parameter "evt".(Š–ÿG
+Osquid:S1135ô"2Complete the task associated to this TODO comment.(ÜÀ†áûÿÿÿÿ
+U
+squid:S106"9Replace this use of System.out or System.err by a logger.(€ø””úÿÿÿÿ
+P
+squid:S106¡"9Replace this use of System.out or System.err by a logger.(ƒ¯È
+Jsquid:S1135 "2Complete the task associated to this TODO comment.(›£Û´
+Bsquid:S1172¼"*Remove this unused method parameter "evt".(™ÃŠñ
+Osquid:S1135½"2Complete the task associated to this TODO comment.(ÜÀ†áûÿÿÿÿ
+Usquid:S1197Ñ"8Move the array designator from the variable to the type.(¡şÏÖøÿÿÿÿ
+Dsquid:S1602æ",Remove useless curly braces around statement(¤çšÜ
+bsquid:CommentedOutCodeLineo"<This block of commented-out lines of code should be removed.(¯‚…Ö
+bsquid:CommentedOutCodeLinev"<This block of commented-out lines of code should be removed.(…‚€•
+hsquid:CommentedOutCodeLine‡"<This block of commented-out lines of code should be removed.(•¾€èûÿÿÿÿ
+hsquid:CommentedOutCodeLine»"<This block of commented-out lines of code should be removed.(Óª®îşÿÿÿÿ
+csquid:CommentedOutCodeLineÀ"<This block of commented-out lines of code should be removed.(¯‚…Ö
+csquid:CommentedOutCodeLineé"<This block of commented-out lines of code should be removed.(¯‚…Ö
+hsquid:CommentedOutCodeLineª"<This block of commented-out lines of code should be removed.(²Š±ßùÿÿÿÿ
+hsquid:CommentedOutCodeLine¯"<This block of commented-out lines of code should be removed.(Óª®îşÿÿÿÿ
+csquid:CommentedOutCodeLine½"<This block of commented-out lines of code should be removed.(¯‚…Ö
+csquid:CommentedOutCodeLineÅ"<This block of commented-out lines of code should be removed.(¯‚…Ö
+hsquid:CommentedOutCodeLineã"<This block of commented-out lines of code should be removed.(²Š±ßùÿÿÿÿ
+hsquid:CommentedOutCodeLineê"<This block of commented-out lines of code should be removed.(Óª®îşÿÿÿÿ
+csquid:CommentedOutCodeLineï"<This block of commented-out lines of code should be removed.(¯‚…Ö
+csquid:CommentedOutCodeLineü"<This block of commented-out lines of code should be removed.(ÁÅæÉ
+csquid:CommentedOutCodeLine„"<This block of commented-out lines of code should be removed.(¯‚…Ö
+hsquid:CommentedOutCodeLineŒ"<This block of commented-out lines of code should be removed.(ôİİëÿÿÿÿÿ
+hsquid:CommentedOutCodeLine¦"<This block of commented-out lines of code should be removed.(êØ¹¦ùÿÿÿÿ
+hsquid:CommentedOutCodeLine¨"<This block of commented-out lines of code should be removed.(áÿ¿Šøÿÿÿÿ
+hsquid:CommentedOutCodeLine«"<This block of commented-out lines of code should be removed.(²Š±ßùÿÿÿÿ
+hsquid:CommentedOutCodeLine²"<This block of commented-out lines of code should be removed.(Óª®îşÿÿÿÿ
+csquid:CommentedOutCodeLine¸"<This block of commented-out lines of code should be removed.(¯‚…Ö
