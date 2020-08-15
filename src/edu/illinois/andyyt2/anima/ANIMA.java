@@ -28,6 +28,7 @@ public class ANIMA extends javax.swing.JFrame {
 
     // Two-dimensional array for the breadth-first search
     private int[][] visited;
+    
     // Variables keeping track of which cell is currently being analyzed
     private int currentGrp;
     private int count;
@@ -40,6 +41,8 @@ public class ANIMA extends javax.swing.JFrame {
     // Constants to help determine edge of cell in guide and analysis essay
     private final double GUIDE_DEVIATION = 1.0;
     private final double ANALYSIS_DEVIATION = 4.0;
+    private final double MIN_ASTROCYTE_SIZE = 100.0;
+    private final double MIN_NUCLEUS_SIZE = 500.0;
 
     // Properties of the computer that is measured on initialization
     private String username;
@@ -49,7 +52,7 @@ public class ANIMA extends javax.swing.JFrame {
      * Creates new form ANIMA
      */
     public ANIMA() {
-        // Initialize variables to null
+        // Initialize variables
         initComponents();
         guideImage = null;
         analysisImage = null;
@@ -67,8 +70,9 @@ public class ANIMA extends javax.swing.JFrame {
 
         // Read in old data
         BufferedReader f;
+        
+        // Create directories for analysis engine if they do not already exist
         try {
-            System.out.println(username);
             boolean directory = new File(username + FILE_SEPERATOR + "Documents/AnalysisEngine").mkdirs();
             if(!directory) {
                 boolean count = new File(username + FILE_SEPERATOR + "Documents/AnalysisEngine"
@@ -78,12 +82,9 @@ public class ANIMA extends javax.swing.JFrame {
                 boolean data = new File(username + FILE_SEPERATOR + "Documents/AnalysisEngine"
                         + FILE_SEPERATOR + "data").mkdirs();
 
-                System.out.println("Directory created? ");
-                System.out.println("count: " + count);
-                System.out.println("maps: " + maps);
-                System.out.println("data: " + data);
             }
 
+            // Create run count file if it does not already exist
             boolean exists = new File(username + FILE_SEPERATOR + "AnalysisEngine"
                     + FILE_SEPERATOR + "count" + FILE_SEPERATOR + "count.txt").isFile();
             if(!exists) {
@@ -93,41 +94,43 @@ public class ANIMA extends javax.swing.JFrame {
                 out.close();
             }
 
+            // Read in run number
             f = new BufferedReader(new FileReader(username + "/Documents/AnalysisEngine/count/count.txt"));
             count = Integer.parseInt(f.readLine());
-            System.out.println(count);
+            
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ANIMA.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(ANIMA.class.getName()).log(Level.SEVERE, null, ex);
-            count = 10000;
         }
         
+        // Log current run number
         jTextArea1.setText("Image Analyzer - Run #" + count);
-        jLabel2.setText("Output to" + username + FILE_SEPERATOR + "Documents"
-                + FILE_SEPERATOR + "AnalysisEngine");
     }
     
+    // Method to get the blue value in the integer representation of a color
     private int getBlue(int a) {
         Color c = new Color(a);
         return c.getBlue();
     }
     
-    private void scanGuide() {
+    // Method to scan the images using thresholds for astrocyte and nucleus detection
+    private void scanImages() {
         jTextArea1.setText(jTextArea1.getText() + "\n" +"Scanning guide (may take a while)...");
-        //jLabel4.setForeground(Color.ORANGE);
-        //BFS
+        
+        // Run a breadth-first search on the graph
         visited = new int[guideImage.getWidth()][guideImage.getHeight()];
         currentGrp = 1;
         Queue<Integer> q = new ArrayDeque<>();
+        
         for(int i = 0; i < guideImage.getWidth(); i++) {
             for(int j = 0; j < guideImage.getHeight(); j++) {
-                //System.out.println(i + " " + j);
-                //System.out.println(thresh + " " + gThresh);
+                // Start at any unvisited point which is both a part of an astrocyte and a nucleus
                 if(getBlue(guideImage.getRGB(i, j)) > gThresh 
                         && getBlue(analysisImage.getRGB(i, j)) > thresh 
                         && visited[i][j] == 0) {
                     visited[i][j] = currentGrp;
+                    
                     // Keep track of how many cells are over the threshold
                     int ct = 1;
                     q.add(i*guideImage.getHeight() + j);
@@ -137,11 +140,11 @@ public class ANIMA extends javax.swing.JFrame {
                         int tempI = hash / guideImage.getHeight();
                         int tempJ = hash % guideImage.getHeight();
                         
+                        // Permute over all directions not yet visited
                         int[][] permute = {{-1, -1}, {-1, 0}, {-1, 1}, 
                         {0, -1}, {0, 0}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
                         
                         for (int[] prm : permute) {
-                            //System.out.println(Arrays.toString(prm));
                             if (tempI + prm[0] >= 0 
                                     && tempI + prm[0] < guideImage.getWidth() 
                                     && tempJ + prm[1] >= 0 
@@ -163,7 +166,6 @@ public class ANIMA extends javax.swing.JFrame {
             }
         }
         
-        System.out.println(values);
     }
 
     /**
@@ -188,7 +190,9 @@ public class ANIMA extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
-        jLabel2 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -252,7 +256,9 @@ public class ANIMA extends javax.swing.JFrame {
 
         jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
-        jLabel2.setText("Output to C:/Users/[username]/Documents/AnalysisEngine");
+        jLabel3.setText("Threshold (leave blank if automatic):");
+
+        jLabel8.setText("Engine Version 0.20");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -268,24 +274,31 @@ public class ANIMA extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addGap(18, 18, 18)
-                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jLabel2))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextField1))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addGap(18, 18, 18)
+                                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton4)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -315,32 +328,41 @@ public class ANIMA extends javax.swing.JFrame {
                     .addComponent(jSeparator2)
                     .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    // Method to analyze image when button is pressed
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        // TODO add your handling code here:
+        // Check if images actually have been loaded
         if(gThresh != -1 && thresh != -1) {
+            // Check if images are the same size
             if(guideImage.getWidth() != analysisImage.getWidth() || 
                 guideImage.getHeight() != analysisImage.getHeight()) {
                 jTextArea1.setText(jTextArea1.getText() + "\n\n" +"Error: Dimension mismatch. Could not analyse.");
-                //jLabel4.setForeground(Color.RED);
             }
             else {
-                scanGuide();
+                // Mark all neuron pixels in the guide image
+                scanImages();
+                
                 jTextArea1.setText(jTextArea1.getText() + "\n\n" +"Summing groups...");
-                //jLabel4.setForeground(Color.ORANGE);
+                
+                // Construct map of images
                 double[][] groups = new double[currentGrp - 1][4];
                 ArrayList<Integer> listLarge = new ArrayList<>();
                 BufferedImage a = new BufferedImage(guideImage.getWidth(), guideImage.getHeight(), BufferedImage.TYPE_INT_RGB);
                 
                 for(int i = 0; i < guideImage.getWidth(); i++) {
                     for(int j = 0; j < guideImage.getHeight(); j++) {
+                        // Check whether a relevant astrocyte has been detected
                         if(visited[i][j] != 0) {
+                            // Record data
                             double[] tempInfo = groups[visited[i][j] - 1];
                             tempInfo[0] ++;
                             tempInfo[1] += getBlue(analysisImage.getRGB(i, j));
@@ -352,13 +374,15 @@ public class ANIMA extends javax.swing.JFrame {
                     }
                 }
                 
+                // Check if nucleus size is over threshold
                 for(int i = 0; i < groups.length; i++) {
                     groups[i][3] = values.poll();
-                    if(groups[i][0] > 500.0 && groups[i][3] > 100) {
+                    if(groups[i][0] > MIN_NUCLEUS_SIZE && groups[i][3] > MIN_ASTROCYTE_SIZE) {
                         listLarge.add(i);
                     }
                 }
                 
+                // Draw map
                 for(int i = 0; i < guideImage.getWidth(); i++) {
                     for(int j = 0; j < guideImage.getHeight(); j++) {
                         // Mark neuron detected
@@ -367,6 +391,7 @@ public class ANIMA extends javax.swing.JFrame {
                             a.setRGB(i, j, c.getRGB());
                         }
                         if(visited[i][j] != 0 && listLarge.contains(visited[i][j] - 1)) {
+                            // Color portion of relevant astrocyte
                             int decide = listLarge.indexOf(visited[i][j] - 1) + 1;
                             int redv = decide & 3;
                             int greenv = (decide & 12)/4;
@@ -384,10 +409,9 @@ public class ANIMA extends javax.swing.JFrame {
                 }
                 
                 
-                
+                // Log and write images and data to files
                 jTextArea1.setText(jTextArea1.getText() + "\n\n#  | Pixels         | MeanInt        | RawInt         "
                         + "\n------------------------------------------------------");
-                //jLabel4.setForeground(Color.ORANGE);
                 try {
                     PrintWriter data = new PrintWriter(new FileWriter(username + "/Documents/AnalysisEngine/data/data" + count + ".txt"));
                     PrintWriter cumulative = new PrintWriter(new FileWriter(username + "/Documents/AnalysisEngine/cumulative.csv", true));
@@ -395,19 +419,20 @@ public class ANIMA extends javax.swing.JFrame {
                     data.println("Pixels      MeanInt     RawInt");
                     cumulative.println("Run #" + count + ", File: " + path + ",");
                     cumulative.println("Size,MeanIntensity,RawIntensity");
-                    System.out.println("Pixels      MeanInt     RawInt");
                     for(int i = 0; i < groups.length; i++) {
                         double[] grp = groups[i];
                         
                         if(listLarge.contains(i)) {
-                            //Mean
+                            // Calculate mean
                             grp[2] = grp[1]/grp[0];
-                            // Add the count of each group
+                            
+                            // Add the count of each group to cumulative data
                             cumulative.println((Math.floor(grp[0]*1000.0/625.0)/1000) + "," + (Math.floor(grp[2]*1000)/1000) + "," + Math.floor(grp[1]));
                             StringBuilder s = new StringBuilder("" + Math.floor(grp[0]) + "/" + grp[3]);
                             StringBuilder s2 = new StringBuilder("" + Math.floor(grp[2]*1000)/1000);
                             StringBuilder s3 = new StringBuilder("" + Math.floor(grp[1]));
                         
+                            // Pad with whitespace
                             while(s.length() < 16) {
                                 s.append(" ");
                             }
@@ -432,9 +457,10 @@ public class ANIMA extends javax.swing.JFrame {
                                     + "\n------------------------------------------------------");
                             data.println(s.toString() + s2.toString() + s3.toString() + 
                                     " RGB(" + redv*80 + ", " + greenv*80 + ", 0)");
-                            System.out.println(s.toString() + s2.toString() + s3.toString());
                         }
                     }
+                    
+                    // Write final data and close files
                     cumulative.println("Size: " + listLarge.size() + ",,");
                     data.println(listLarge.size());
                     data.close();
@@ -444,47 +470,43 @@ public class ANIMA extends javax.swing.JFrame {
                     File outputfile = new File(username + "/Documents/AnalysisEngine/maps/result" + count + ".png");
                     ImageIO.write(a, "png", outputfile);
                     count++;
-                    System.out.println(count);
                     PrintWriter out = new PrintWriter(new FileWriter(username + "/Documents/AnalysisEngine/count/count.txt"));
                     out.println(count);
                     out.close();
                     
                 } catch (IOException e) {
-                    //Stuff should happen lol
                     e.printStackTrace();
                 }
                 
                 jTextArea1.setText(jTextArea1.getText() + "\n" +"Complete!");
-                //jLabel4.setForeground(new Color(50, 125, 25));
             }
         }
         else {
             jTextArea1.setText(jTextArea1.getText() + "\n\n" +"Error: Files not complete. Could not analyse.");
-            //jLabel4.setForeground(Color.RED);
         }
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        //Handle open button action.
+        // Handle open button action.
         int returnVal = fc.showOpenDialog(ANIMA.this);
 
+        // If file opened, read in image
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
+            
+            // Check if the file exists
             if(file.exists()) {
                 path = file.getAbsolutePath();
                 try {
                     jTextArea1.setText(jTextArea1.getText() + "\n\n" +"Processing Image...");
-                    //jLabel4.setForeground(Color.ORANGE);
                     
+                    // Read image
                     FileInputStream in = new FileInputStream(file);
                     guideImage = ImageIO.read(in);
                     
                     in.close();
                     
                     jTextArea1.setText(jTextArea1.getText() + "\n" +"Calculating Threshold...");
-                    //jLabel4.setForeground(Color.ORANGE);
-                    
                     
                     double sum = 0;
                     
@@ -507,8 +529,7 @@ public class ANIMA extends javax.swing.JFrame {
                     stdev = stdev / ((double) guideImage.getHeight()*guideImage.getWidth());
                     stdev = Math.sqrt(stdev);
                     
-                    //TODO: CHANGE [DONE]
-                    System.out.println("Guide threshold:" + (mean + stdev/ GUIDE_DEVIATION));
+                    // Calculate guide threshold
                     gThresh = (int) (mean + stdev/ GUIDE_DEVIATION);
                     
                     
@@ -530,15 +551,13 @@ public class ANIMA extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+
         int returnval = fc.showOpenDialog(ANIMA.this);
         if(returnval == JFileChooser.APPROVE_OPTION) {
             File f = fc.getSelectedFile();
             if(f.exists()) {
                 try {
-                    
                     jTextArea1.setText(jTextArea1.getText() + "\n\n" +"Processing Image...");
-                    //(Color.ORANGE);
                 
                     FileInputStream in = new FileInputStream(f);
                     analysisImage = ImageIO.read(in);
@@ -546,16 +565,12 @@ public class ANIMA extends javax.swing.JFrame {
                     in.close();
                
                     jTextArea1.setText(jTextArea1.getText() + "\n" +"Calculating Threshold...");
-                    //jLabel4.setForeground(Color.ORANGE);
                 
                 
                     double sum = 0;
                 
                     for(int i = 0; i < analysisImage.getWidth(); i++) {
                         for(int j = 0; j < analysisImage.getHeight(); j++) {
-                            if(j % 10 == 0) {
-                                //System.out.println(getBlue(analysisImage.getRGB(i, j)));
-                            }
                             sum += getBlue(analysisImage.getRGB(i, j));
                         }
                     }
@@ -572,32 +587,40 @@ public class ANIMA extends javax.swing.JFrame {
                 
                     stdev = stdev / ((double) analysisImage.getHeight()*analysisImage.getWidth());
                     stdev = Math.sqrt(stdev);
-                    System.out.println(mean + " " + stdev);
                     
-                    //TODO: CHANGE [DONE]
-                    System.out.println("Analysis threshold:" + (mean + stdev/ANALYSIS_DEVIATION));
-                    thresh = (int) (mean + stdev/ANALYSIS_DEVIATION);
-                    /* if(thresh < 9) {
-                        // System.out.println(mean + stdev);
-                        thresh = (int)Math.round(mean + stdev);
-                    } */
+                    String s = jTextField1.getText();
+                    if(s.isEmpty()) {
+                        // Use automatic threshold
+                        thresh = (int) (mean + stdev/ANALYSIS_DEVIATION);
                     
-                    if(thresh < 5) {
-                        thresh = 5;
+                        if(thresh < 5) {
+                            thresh = 5;
+                        }
+                    
+                        jTextArea1.setText(jTextArea1.getText() + "\n" +"Status: Ready");
+                        jLabel6.setText("Analysis Uploaded: Yes");
+                        jLabel6.setForeground(new Color(50, 125, 25));
                     }
-                    // thresh = 15;
-                    thresh = 20;
-                    //thresh = 35;
-                
-                    jTextArea1.setText(jTextArea1.getText() + "\n" +"Status: Ready");
-                    //jLabel4.setForeground(new Color(50, 125, 25));
-                    jLabel6.setText("Analysis Uploaded: Yes");
-                    jLabel6.setForeground(new Color(50, 125, 25));
-                
+                    else {
+                        // Set a manual threshold
+                        int num = Integer.parseInt(s);
+                        
+                        if(num < 0 || num > 255) {
+                            jTextArea1.setText(jTextArea1.getText() + "\n" + "Warning: Threshold out of bounds. Rectifying.");
+                            num = Math.min(Math.max(num, 0), 255);
+                        }
+                        
+                        thresh = num;
+                        
+                        jTextArea1.setText(jTextArea1.getText() + "\n" +"Status: Ready");
+                        jLabel6.setText("Analysis Uploaded: Yes");
+                        jLabel6.setForeground(new Color(50, 125, 25));
+                    }
 
                 } catch(IOException e) {
                     jTextArea1.setText(jTextArea1.getText() + "\n" +"Error: Upload failed. Try again.");
-                    //jLabel4.setForeground(Color.RED);
+                } catch(NumberFormatException e) {
+                    jTextArea1.setText(jTextArea1.getText() + "\n" +"Error: Non-integer entered as threshold. Try again.");
                 }
             }
         }
@@ -662,14 +685,16 @@ public class ANIMA extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
