@@ -18,7 +18,6 @@ import javax.swing.JFileChooser;
  * @author Andy Tang
  */
 public class ANIMA extends javax.swing.JFrame {
-
     // Variables describing the guide stain image and image to be analyzed
     private BufferedImage guideImage;
     private BufferedImage analysisImage;
