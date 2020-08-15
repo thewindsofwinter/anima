@@ -1,4 +1,4 @@
-# Project Anima &nbsp;   [![Version: v0.2.0](https://img.shields.io/badge/version-v0.20-red.svg)](https://travis-ci.com/thewindsofwinter/anima) [![Build Status](https://travis-ci.com/thewindsofwinter/anima.svg?branch=master)](https://travis-ci.com/thewindsofwinter/anima) [![license: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# Project Anima &nbsp;   [![Version: v0.2.0](https://img.shields.io/badge/version-v0.2.0-red.svg)](https://travis-ci.com/thewindsofwinter/anima) [![Build Status](https://travis-ci.com/thewindsofwinter/anima.svg?branch=master)](https://travis-ci.com/thewindsofwinter/anima) [![license: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
 
