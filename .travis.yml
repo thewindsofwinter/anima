@@ -2,8 +2,8 @@ language: java
 jdk:
   - openjdk11
 before_install:
-    - wget --no-check-certificate http://apache.org/dist/ant/binaries/apache-ant-1.10.6-bin.tar.gz
-    - tar -xzvf apache-ant-1.10.6-bin.tar.gz
-    - export PATH=`pwd`/apache-ant-1.10.6/bin:$PATH
+    - wget --no-check-certificate http://apache.org/dist/ant/binaries/apache-ant-1.10.8-bin.tar.gz
+    - tar -xzvf apache-ant-1.10.8-bin.tar.gz
+    - export PATH=`pwd`/apache-ant-1.10.8/bin:$PATH
     - echo $(ant -version)
 script: ant compile jar run
