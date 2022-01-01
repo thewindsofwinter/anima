@@ -7,9 +7,10 @@ immunohistochemically stained neuron images. This repository replaces thewindsof
 location for software storage as it is being developed.
 
 ## Notes
-This image analysis engine is still in its infancy. It was hacked together over the course of approximately a single month during
-the summer of 2019, and therefore has immensely messy code with few comments. Fixes will come sometime in the next few months,
-probably over the summer of 2020.
+Since its primary development in the summer of 2019, this Image Analysis Engine has been improved steadily. Unfortunately, 
+documentation has not quite kept up with the improvements, which I seek to fix in the near-future. Please let me know 
+([andyyt2@illinois.edu](mailto:andyyt2@illinois.edu)) if you have any trouble with the algorithm and I will work with you
+to resolve any issues.
 
 Please note that the second section of the setup of the Image Analysis Engine is no longer necessary. I'll work on cleaning up 
 instructions as well as writing cleaner code at some point in the future. There are also a variety of features that I wish to 
