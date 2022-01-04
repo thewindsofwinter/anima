@@ -6,6 +6,9 @@ ANIMA (Analyzer for Neural Images by Matching Algorithm) is a Java-based image p
 immunohistochemically stained neuron images. This repository replaces thewindsofwinter/neural-analysis as a more permanent 
 location for software storage as it is being developed.
 
+The following [paper](https://www.pnas.org/content/118/51/e2021265118) utilizes ANIMA for analysis of neurodegeneration
+in brain images of mice.
+
 ## Notes
 Since its primary development in the summer of 2019, this Image Analysis Engine has been improved steadily. Unfortunately, 
 documentation has not quite kept up with the improvements, which I seek to fix in the near-future. Please let me know 
